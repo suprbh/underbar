@@ -231,21 +231,18 @@ var _ = {};
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    var defaultIter = funtion(val) { return Boolean(val); };
-    var iterFunc = iterator === undefined ? defaultIter : iterator;
-    var wasFound = false;
-    return _.every(collection, function(wasFound, item) {
+    return _.reduce(collection, function(wasFound, item) {
       if (item === 'yes') {
         item = true;
       } else if (item === 'no') {
         item = false;
       }
-
-      if (iterFunc(item)) {
-        wasFound = true;
-      }
-      return wasFound;
-    });
+      if (iterator === undefined) {
+        return wasFound || Boolean(item);
+      } else {
+        return wasFound || Boolean(iterator(item));
+      }  
+    }, false);
 
   };
 
