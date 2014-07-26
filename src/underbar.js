@@ -266,11 +266,25 @@ var _ = {};
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for (var i = 1; i < arguments.length; i++) {
+      for (var key in arguments[i]) {
+        obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for (var i = 1; i < arguments.length; i++) {
+      for (var key in arguments[i]) {
+        if (obj[key] === undefined) {
+         obj[key] = arguments[i][key];
+        }
+      }
+    }
+    return obj;
   };
 
 
@@ -312,6 +326,14 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var alreadyCalled = {};
+
+    return function () {
+      if (arguments[0] in alreadyCalled) {
+        return alreadyCalled[arguments[0]];
+      }
+      return (alreadyCalled[arguments[0]] = func.apply(this, arguments));
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -321,6 +343,11 @@ var _ = {};
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var argsToFunc = Array.prototype.slice.call(arguments, 2);
+
+    return setTimeout(function() { 
+      return func.apply(this, argsToFunc);}, 
+      wait);
   };
 
 
@@ -335,6 +362,20 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    //var randomArray = Array.prototype.slice
+    var randArray = Array.prototype.slice.call(array);
+    var max = randArray.length;
+    var tmp, min, j;
+
+    for (var i = 0; i < randArray.length; i++) {
+      min = i;
+      j = Math.floor(Math.random() * (max - min)) + min;
+      // shuffle:
+      tmp = randArray[i];
+      randArray[i] = randArray[j];
+      randArray[j] = tmp;
+    }
+    return randArray;
   };
 
 
