@@ -362,11 +362,9 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-    //var randomArray = Array.prototype.slice
     var randArray = Array.prototype.slice.call(array);
     var max = randArray.length;
     var tmp, min, j;
-
     for (var i = 0; i < randArray.length; i++) {
       min = i;
       j = Math.floor(Math.random() * (max - min)) + min;
