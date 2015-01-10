@@ -108,6 +108,11 @@ var _ = {};
     return result;
   };
 
+  // _.reject = function(collection, test){
+  //   var result = [];
+  //   _.filter(collection, !test);
+  // }
+
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
 
